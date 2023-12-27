@@ -1,4 +1,4 @@
-﻿<#
+<#
 
 Ersin Isenkul
 ersinisenkul@gmail.com
@@ -45,9 +45,9 @@ $ErrorActionPreference = "SilentlyContinue"
 function New-ServerList{
     
     Clear-Host
-    $filePath = ".\serverlist.txt"
+    $Global:filePath = ".\serverlist.txt"
 
-    if ((Get-Content -Path $filePath -Raw) -eq $null) {
+    if ((Get-Content -Path $Global:filePath -Raw) -eq $null) {
     Write-Host "serverlist.txt is empty or doesn't exist. Running the script to generate it."
 
     $prompt = @(
@@ -66,17 +66,17 @@ function New-ServerList{
     $splitServers = $ServerList -split ';'
     $normalizedServers = $splitServers | ForEach-Object { $_.Trim() }
 
-    $normalizedServers | Out-File -FilePath $filePath
+    $normalizedServers | Out-File -FilePath $Global:filePath
 
-    Write-Host "Server list saved to $filePath" -ForegroundColor Green
+    Write-Host "Server list saved to $Global:filePath" -ForegroundColor Green
     }
 }
 
 function Get-ServerList{
 
-    $filePath = ".\serverlist.txt"
+    $Global:filePath = ".\serverlist.txt"
 
-    if ((Get-Content -Path $filePath -Raw) -eq $null) {
+    if ((Get-Content -Path $Global:filePath -Raw) -eq $null) {
     Write-Host "serverlist.txt is empty or doesn't exist. You need to create new list."
 
     $prompt = @(
@@ -95,12 +95,12 @@ function Get-ServerList{
     $splitServers = $ServerList -split ';'
     $normalizedServers = $splitServers | ForEach-Object { $_.Trim() }
 
-    $normalizedServers  | Out-File -FilePath $filePath
+    $normalizedServers  | Out-File -FilePath $Global:filePath
 
-    Write-Host "Server list saved to $filePath" -ForegroundColor Green
+    Write-Host "Server list saved to $Global:filePath" -ForegroundColor Green
 }
 
-    $Servers = Get-Content -Path $filePath
+    $Servers = Get-Content -Path $Global:filePath
     Write-Host "Server List:" -ForegroundColor Cyan
     Write-Host ($Servers -join "`n") -ForegroundColor Cyan
 
@@ -109,10 +109,10 @@ function Get-ServerList{
 
 function Add-ServertoList {
 
-    $filePath = ".\serverlist.txt"
+    $Global:filePath = ".\serverlist.txt"
 
-    if (Test-Path -Path $filePath) {
-        $filePath = ".\serverlist.txt"
+    if (Test-Path -Path $Global:filePath) {
+        $Global:filePath = ".\serverlist.txt"
     
         $prompt = @(
             'Add the server to list',
@@ -125,12 +125,12 @@ function Add-ServertoList {
     $NewsplitServers = $NewServerList -split ';'
     $NewnormalizedServers = $NewsplitServers | ForEach-Object { $_.Trim() }
 
-    $NewnormalizedServers | %{Add-Content -Path $filePath -Value $_ }
+    $NewnormalizedServers | %{Add-Content -Path $Global:filePath -Value $_ }
 
 
-    Write-Host "Added new server to the list. Server list saved to $filePath" -ForegroundColor Green
+    Write-Host "Added new server to the list. Server list saved to $Global:filePath" -ForegroundColor Green
 
-    $Servers = Get-Content -Path $filePath
+    $Servers = Get-Content -Path $Global:filePath
     Write-Host "Server List:" -ForegroundColor Cyan
     Write-Host ($Servers -join "`n") -ForegroundColor Cyan
 
@@ -141,10 +141,10 @@ function Add-ServertoList {
 
 function Remove-ServerList {
 
-    $filePath = ".\serverlist.txt"
+    $Global:filePath = ".\serverlist.txt"
 
-    if (Test-Path -Path $filePath) {
-        Remove-Item -Path $filePath -Force
+    if (Test-Path -Path $Global:filePath) {
+        Remove-Item -Path $Global:filePath -Force
         Write-Host "Server list removed successfully." -ForegroundColor Green
     } else {
         Write-Host "Server list does not exist." -ForegroundColor Yellow
@@ -445,7 +445,7 @@ function Show-ServerUpdateMenu(){
     
     while ($true) {
         
-        $Servers = Get-Content -Path $filePath 
+        $Servers = Get-Content -Path $Global:filePath 
 
         Clear-Host
         Write-Host "		"
@@ -544,6 +544,3 @@ function Show-ServerUpdateMenu(){
 
 New-ServerList
 Show-ServerUpdateMenu
-
-
-
